@@ -1,8 +1,8 @@
-name: learn-github-actions
+name: setup-go-env
 run-name: Setup Go Env
 on: [push]
 jobs:
-  Setup-Go-Environment:
+  setup-go-env:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/setup-go@v3.3.1
