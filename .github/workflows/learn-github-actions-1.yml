@@ -28,7 +28,7 @@ jobs:
   #     shell: bash    
   example-job:
     runs-on: ubuntu-latest
-      env:
+    env:
       SCRIPT_PATH: ./.github/scripts/
     steps:
     - uses: actions/checkout@v3
