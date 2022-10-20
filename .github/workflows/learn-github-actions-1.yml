@@ -20,9 +20,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: date
-  example-job:
+  # example-job:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #    - name: run a script
+  #      run: ./.github/scripts/1.sh # doesn't find file or dir
+  #     shell: bash    
+    example-job:
     runs-on: ubuntu-latest
     steps:
-    - name: run a script
-      run: ./.github/scripts/1.sh # doesn't find file or dir
-      shell: bash    
+      - run: pwd
+      - run: ls -la
