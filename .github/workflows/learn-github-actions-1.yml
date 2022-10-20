@@ -36,5 +36,5 @@ jobs:
     - run: ls -la
     - name: run a script
       run: chmod +x ${SCRIPT_PATH}/1.sh
-      run: ${SCRIPT_PATH}/1.sh
+    - run: ${SCRIPT_PATH}/1.sh
       shell: bash     
