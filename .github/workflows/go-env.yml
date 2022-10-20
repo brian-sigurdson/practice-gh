@@ -2,7 +2,7 @@ name: learn-github-actions
 run-name: Setup Go Env
 on: [push]
 jobs:
-  - name: Setup Go environment
+  Setup Go environment:
     runs-on: ubuntu-latest
     uses: actions/setup-go@v3.3.1
     with:
