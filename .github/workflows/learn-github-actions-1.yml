@@ -25,5 +25,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: run a script
-      run: ../scripts/1.sh
+      run: ./.github/scripts/1.sh
       shell: bash    
