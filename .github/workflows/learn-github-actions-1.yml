@@ -20,3 +20,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: date
+  echo-stuff3:
+    needs: echo-stuff2
+    runs-on: ubuntu-latest
+    steps:
+    - name: run a script
+      run: ../scripts/script1.sh
+      shell: bash    
