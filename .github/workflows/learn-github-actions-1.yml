@@ -28,10 +28,13 @@ jobs:
   #     shell: bash    
   example-job:
     runs-on: ubuntu-latest
+      env:
+      SCRIPT_PATH: ./.github/scripts/
     steps:
     - uses: actions/checkout@v3
     - run: pwd
     - run: ls -la
     - name: run a script
-      run: ./.github/scripts/1.sh
+      run: chmod +x ${SCRIPT_PATH}/1.sh
+      run: ${SCRIPT_PATH}/1.sh
       shell: bash     
