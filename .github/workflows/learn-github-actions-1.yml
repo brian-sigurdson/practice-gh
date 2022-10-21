@@ -38,3 +38,7 @@ jobs:
       run: chmod +x ${SCRIPT_PATH}/1.sh
     - run: ${SCRIPT_PATH}/1.sh
       shell: bash     
+  echo-aws-cli:
+    runs-on: ubuntu-latest
+    steps:
+    - run: aws --help
