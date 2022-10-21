@@ -1,12 +1,24 @@
-# taken from https://github.com/aws-actions/configure-aws-credentials#usage
-# to test if i setup gh-aws oidc correctly
+# Referenced in the GIA Platform Documentation
+# Configure AWS Credentials: https://github.com/aws-actions/configure-aws-credentials#usage
+
+# Work on GitHub?
+# yes
+
+# Work with ACT?
+# No
+
+# Comments
+# ---------
+# OIDC requires a trust relationship between GH and AWS, which isn't present when running locally.
+# I suspect that ACT would work if creds were stored as GH secrets.
+# I'll see as I test other actions.
 
 name: List AWS Buckets
 run-name: ${{ github.actor }} is printing bucket names
 on: push
 
 jobs:
-  deploy:
+  list-buckets:
     name: List AWS S3
     runs-on: ubuntu-latest
     # These permissions are needed to interact with GitHub's OIDC Token endpoint.
