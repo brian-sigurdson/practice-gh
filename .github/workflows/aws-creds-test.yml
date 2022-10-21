@@ -1,6 +1,10 @@
 # taken from https://github.com/aws-actions/configure-aws-credentials#usage
 # to test if i setup gh-aws oidc correctly
 
+name: List AWS Buckets
+run-name: ${{ github.actor }} is printing bucket names
+on: push
+
 jobs:
   deploy:
     name: List AWS S3
