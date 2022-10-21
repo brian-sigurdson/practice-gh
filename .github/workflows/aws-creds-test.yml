@@ -18,7 +18,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Configure AWS credentials from Test account
-      uses: aws-actions/configure-aws-credentials@v1
+      uses: aws-actions/configure-aws-credentials@v1-node16
       with:
         role-to-assume: arn:aws:iam::236550795759:role/bks_brian-sigurdson_gh-practice_S3ReadOnly
         aws-region: us-east-1
