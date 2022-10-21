@@ -1,0 +1,24 @@
+# taken from https://github.com/aws-actions/configure-aws-credentials#usage
+# to test if i setup gh-aws oidc correctly
+
+jobs:
+  deploy:
+    name: List AWS S3
+    runs-on: ubuntu-latest
+    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Configure AWS credentials from Test account
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: arn:aws:iam::236550795759:role/bks_brian-sigurdson_gh-practice_S3ReadOnly
+        aws-region: us-east-1
+
+    - name: List bucket names
+      run: |
+        aws s3 ls
