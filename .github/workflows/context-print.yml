@@ -1,4 +1,5 @@
-name: Context testing
+name: Context printing
+run-name: ${{ github.actor }} is context printing
 on: push
 
 jobs:
