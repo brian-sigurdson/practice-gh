@@ -32,7 +32,7 @@ jobs:
     - name: Configure AWS credentials from Test account
       uses: aws-actions/configure-aws-credentials@v1-node16
       with:
-        role-to-assume: arn:aws:iam::236550795759:role/bks_brian-sigurdson_gh-practice_S3ReadOnly
+        role-to-assume: arn:aws:iam::223356124846:role/bks_brian-sigurdson_gh-practice
         aws-region: us-east-1
 
     - name: List bucket names
