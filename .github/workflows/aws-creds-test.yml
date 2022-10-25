@@ -48,6 +48,6 @@ jobs:
       
     - name: Test env params
       run: |
-      echo "testing"
-      echo "${{ steps.set-output.outputs.MY_TEST }}"
-      echo "testing"
+        echo "testing"
+        echo "${{ steps.set-output.outputs.MY_TEST }}"
+        echo "testing"
