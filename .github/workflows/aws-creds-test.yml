@@ -30,13 +30,14 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Configure AWS credentials from Test account
+      if: ${{ $AWS_SESSION_TOKEN == null }}
       uses: aws-actions/configure-aws-credentials@v1-node16
       with:
         role-to-assume: arn:aws:iam::223356124846:role/bks_brian-sigurdson_gh-practice
         aws-region: us-east-1
-        web-identity-token-file: "$AWS_SESSION_TOKEN"
+        # web-identity-token-file: "$AWS_SESSION_TOKEN"
 
     - name: List bucket names
       run: |
         aws s3 ls
-        echo $AWS_SESSION_TOKEN
+        # echo $AWS_SESSION_TOKEN
