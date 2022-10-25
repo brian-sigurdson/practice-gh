@@ -36,21 +36,30 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    # - name: Configure AWS credentials from Test account
-    #   if: ${{ env.MY_TEST == null }}
-    #   uses: aws-actions/configure-aws-credentials@v1-node16
-    #   with:
-    #     role-to-assume: arn:aws:iam::223356124846:role/bks_brian-sigurdson_gh-practice
-    #     aws-region: us-east-1
-    #     # web-identity-token-file: "$AWS_SESSION_TOKEN"
+    - name: Configure AWS credentials - GitHub
+      if: ${{ secrets.AWS_SESSION_TOKEN == null }}
+      uses: aws-actions/configure-aws-credentials@v1-node16
+      with:
+        role-to-assume: arn:aws:iam::223356124846:role/bks_brian-sigurdson_gh-practice
+        aws-region: us-east-1
 
-    # - name: List bucket names
-    #   run: |
-    #     aws s3 ls
-      
-    - name: Test env params
+    - name: Configure AWS credentials - Local
+      if: ${{ secrets.AWS_SESSION_TOKEN != null }}
+      uses: aws-actions/configure-aws-credentials@v1-node16
+      with:
+        role-to-assume: arn:aws:iam::223356124846:role/bks_brian-sigurdson_gh-practice
+        aws-region: us-east-1
+        web-identity-token-file: ${{ secrets.AWS_SESSION_TOKEN }}
+
+    - name: List bucket names
       run: |
-        echo "MY_TEST1"
-        echo "${{ steps.set-output.outputs.MY_TEST1 }}"
-        echo "MY_TEST2"
-        echo "${{ steps.set-output.outputs.MY_TEST2 }}"
+        aws s3 ls
+      
+    # - name: Test env params
+    #   run: |
+    #     echo "MY_TEST1"
+    #     echo "${{ steps.set-output.outputs.MY_TEST1 }}"
+    #     echo "MY_TEST2"
+    #     echo "${{ steps.set-output.outputs.MY_TEST2 }}"
+    #     echo "act secret"
+    #     echo "${{ secrets.AWS_SESSION_TOKEN }}"        
