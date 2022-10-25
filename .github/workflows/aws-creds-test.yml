@@ -25,12 +25,15 @@ jobs:
     permissions:
       id-token: write
       contents: read
+    # env:
+    #   MY_TEST: $AWS_SESSION_TOKEN
+
     steps:
     - name: Checkout
       uses: actions/checkout@v3
 
     - name: Configure AWS credentials from Test account
-      if: ${{ $AWS_SESSION_TOKEN == null }}
+      if: ${{ env.MY_TEST == null }}
       uses: aws-actions/configure-aws-credentials@v1-node16
       with:
         role-to-assume: arn:aws:iam::223356124846:role/bks_brian-sigurdson_gh-practice
@@ -40,4 +43,4 @@ jobs:
     - name: List bucket names
       run: |
         aws s3 ls
-        # echo $AWS_SESSION_TOKEN
+        env 
