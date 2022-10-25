@@ -25,10 +25,12 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    # env:
-    #   MY_TEST: $AWS_SESSION_TOKEN
 
     steps:
+    - name: Set Output Params
+      id: set-output
+      run: MY_TEST=$AWS_SESSION_TOKEN
+
     - name: Checkout
       uses: actions/checkout@v3
 
@@ -43,4 +45,9 @@ jobs:
     - name: List bucket names
       run: |
         aws s3 ls
-        env 
+      
+    - name: Test env params
+      run: |
+      echo "testing"
+      echo "${{ steps.set-output.outputs.MY_TEST }}"
+      echo "testing"
