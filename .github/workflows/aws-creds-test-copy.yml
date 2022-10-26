@@ -33,7 +33,7 @@ jobs:
       uses: aws-actions/configure-aws-credentials@v1-node16
       with:
         role-to-assume: arn:aws:iam::223356124846:role/bks_brian-sigurdson_gh-practice
-        aws-region: 'us-east-1' #${{ env.AWS_DEFAULT_REGION }}
+        aws-region: us-east-1 #${{ env.AWS_DEFAULT_REGION }}
 
     - name: List bucket names
       run: |
