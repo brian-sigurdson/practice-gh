@@ -1,0 +1,28 @@
+# Referenced in the GIA Platform Documentation
+# Java Action: https://github.com/actions/setup-java
+
+# Work on GitHub?
+# 
+
+# Work with ACT?
+# 
+
+# Comments
+# ---------
+
+name: List Java version
+run-name: ${{ github.actor }} is running java
+on: push
+
+jobs:
+  list-java-version:
+    name: List Java version
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        check-latest: true
+    - run: java -version  

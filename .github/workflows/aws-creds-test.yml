@@ -1,0 +1,71 @@
+# Referenced in the GIA Platform Documentation
+# Configure AWS Credentials: https://github.com/aws-actions/configure-aws-credentials#usage
+
+# Work on GitHub?
+# yes
+
+# Work with ACT?
+# No
+
+# Comments
+# ---------
+# OIDC requires a trust relationship between GH and AWS, which isn't present when running locally.
+# I suspect that ACT would work if creds were stored as GH secrets.
+# I'll see as I test other actions.
+
+name: List AWS Buckets
+run-name: ${{ github.actor }} is printing bucket names
+on: push
+
+# Locally, the env vars will be set to inputted values, but on GH they should be null and they be set by
+# aws-actions/configure-aws-credentials@v1-node16
+env:
+  SESSION_TYPE: 'not-local'
+  # comment out for now.  works locally, because i can pass in env vars, but on GH it would need
+  # to be a secret, but i'm not sure how the client is handling such situations.  low priority
+  # AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+  AWS_DEFAULT_REGION: 'us-east-1'
+  # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  # AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+  
+
+jobs:
+  list-buckets:
+    name: List AWS S3
+    runs-on: ubuntu-latest
+    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+    - name: Local - Install dependencies
+      if: ${{ env.SESSION_TYPE == 'local' }}
+      run: |
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip awscliv2.zip
+        ./aws/install > /dev/null
+        apt-get -y install less
+
+    - name: Checkout
+      uses: actions/checkout@v3     
+
+    - name: GitHub - Configure AWS credentials
+      if: ${{ env.SESSION_TYPE == 'not-local' }}
+      uses: aws-actions/configure-aws-credentials@v1-node16
+      with:
+        role-to-assume: arn:aws:iam::223356124846:role/bks_brian-sigurdson_gh-practice
+        aws-region: ${{ env.AWS_DEFAULT_REGION }}
+    
+    - name: Run stuff
+      run: |   
+        # pwd
+        echo "SESSION_TYPE = $SESSION_TYPE"
+
+    - name: List bucket names
+      run: |
+        aws s3 ls
+        aws configure list
+        aws sts get-caller-identity
+
