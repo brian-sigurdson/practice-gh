@@ -21,45 +21,67 @@ jobs:
   list-buckets:
     name: List AWS S3
     runs-on: ubuntu-latest
+    env:
+    #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: us-east-1
+      # AWS_PROFILE: ${{ env.AWS_PROFILE }}
+
     # These permissions are needed to interact with GitHub's OIDC Token endpoint.
     permissions:
       id-token: write
       contents: read
 
     steps:
-    - name: Set Output Params
-      id: set-output
-      run: |
-        # echo "MY_TEST1=$AWS_SESSION_TOKEN" >> $GITHUB_OUTPUT
-        echo "MY_TEST2=my_test2" >> $GITHUB_OUTPUT
+    # - name: Install AWS CLI - Local
+    #   if: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #   run: |
+    #     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    #     unzip awscliv2.zip
+    #     ./aws/install > /dev/null
 
     - name: Checkout
       uses: actions/checkout@v3
 
-    # - name: Configure AWS credentials - GitHub
-    #   if: ${{ secrets.AWS_SESSION_TOKEN == null }}
-    #   uses: aws-actions/configure-aws-credentials@v1-node16
-    #   with:
-    #     role-to-assume: arn:aws:iam::223356124846:role/bks_brian-sigurdson_gh-practice
-    #     aws-region: us-east-1
+    - name: Configure AWS credentials - GitHub
+      # if: ${{ secrets.AWS_SESSION_TOKEN }} == null
+      uses: aws-actions/configure-aws-credentials@v1-node16
+      with:
+        role-to-assume: arn:aws:iam::223356124846:role/bks_brian-sigurdson_gh-practice
+        aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
     # - name: Configure AWS credentials - Local
-    #   if: ${{ secrets.AWS_SESSION_TOKEN != null }}
+    #   if: ${{ secrets.AWS_ACCESS_KEY_ID }}
     #   uses: aws-actions/configure-aws-credentials@v1-node16
     #   with:
-    #     role-to-assume: arn:aws:iam::223356124846:role/bks_brian-sigurdson_gh-practice
-    #     aws-region: us-east-1
-    #     web-identity-token-file: ${{ secrets.AWS_SESSION_TOKEN }}
+    #     # role-to-assume: arn:aws:iam::223356124846:role/bks_brian-sigurdson_gh-practice
+    #     aws-region: ${{ env.AWS_DEFAULT_REGION }}
+    #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+    #     # aws-profile: ${{ env.AWS_PROFILE }}
 
-    # - name: List bucket names
+    # - name: Run stuff
     #   run: |
-    #     aws s3 ls
-      
-    - name: Test env params
+    #     # aws --version     
+    #     # pwd
+    #     echo $AWS_DEFAULT_REGION
+    #     aws configure list
+    #     aws sts get-caller-identity
+
+
+    - name: List bucket names
       run: |
-        # echo "MY_TEST1"
-        # echo "${{ steps.set-output.outputs.MY_TEST1 }}"
-        echo "MY_TEST2"
-        echo "${{ steps.set-output.outputs.MY_TEST2 }}"
-        echo "act secret"
-        echo "${{ secrets.AWS_SESSION_TOKEN }}"        
+    #     export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+    #     export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    #     export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+    #     echo AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+    #     echo AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    #     echo AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+
+        aws s3 ls
+        aws configure list
+        aws sts get-caller-identity
+    
+
+
