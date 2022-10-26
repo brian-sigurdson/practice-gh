@@ -5,7 +5,7 @@ on: push
 # Locally, the env vars will be set to inputted values, but on GH they should be null and they be set by
 # aws-actions/configure-aws-credentials@v1-node16
 env:
-  SESSION_TYPE: 'not-local'
+  # SESSION_TYPE: 'not-local'
   # comment out for now.  works locally, because i can pass in env vars, but on GH it would need
   # to be a secret, but i'm not sure how the client is handling such situations.  low priority
   # AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
@@ -29,7 +29,7 @@ jobs:
       uses: actions/checkout@v3     
 
     - name: GitHub - Configure AWS credentials
-      if: ${{ env.SESSION_TYPE == 'not-local' }}
+      # if: ${{ env.SESSION_TYPE == 'not-local' }}
       uses: aws-actions/configure-aws-credentials@v1-node16
       with:
         role-to-assume: arn:aws:iam::223356124846:role/bks_brian-sigurdson_gh-practice
