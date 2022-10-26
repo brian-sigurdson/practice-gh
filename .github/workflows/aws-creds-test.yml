@@ -20,14 +20,15 @@ on: push
 # Locally, the env vars will be set to inputted values, but on GH they should be null and they be set by
 # aws-actions/configure-aws-credentials@v1-node16
 env:
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  SESSION_TYPE: 'not-local'
   # comment out for now.  works locally, because i can pass in env vars, but on GH it would need
   # to be a secret, but i'm not sure how the client is handling such situations.  low priority
   # AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
   AWS_DEFAULT_REGION: 'us-east-1'
-  AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-  SESSION_TYPE: 'not-local'
+  # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  # AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+  
 
 jobs:
   list-buckets:
