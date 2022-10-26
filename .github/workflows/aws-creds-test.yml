@@ -78,7 +78,6 @@ jobs:
     #     echo AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
     #     echo AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
     #     echo AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
-
         aws s3 ls
         aws configure list
         aws sts get-caller-identity
