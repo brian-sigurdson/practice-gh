@@ -30,7 +30,7 @@ jobs:
 
     - name: GitHub - Configure AWS credentials
       # if: ${{ env.SESSION_TYPE == 'not-local' }}
-      uses: aws-actions/configure-aws-credentials@v1-node16
+      uses: aws-actions/configure-aws-credentials@v1 #v1-node16
       with:
         role-to-assume: arn:aws:iam::223356124846:role/bks_brian-sigurdson_gh-practice
         aws-region: us-east-1 #${{ env.AWS_DEFAULT_REGION }}
