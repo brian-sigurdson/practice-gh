@@ -28,21 +28,51 @@ jobs:
       contents: read
 
     steps:
+    - name: Local - Set Environment Variables
+      if: ${{ env.AWS_DEFAULT_REGION }} == "us-west-2"
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ env.AWS_DEFAULT_REGION }}
+        AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+    # - name: Local - Install dependencies
+    #   if: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #   run: |
+    #     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    #     unzip awscliv2.zip
+    #     ./aws/install > /dev/null
+    #     apt-get install less
+
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v3     
+    # - name: Configure AWS credentials - GitHub
+    #   # if: ${{ secrets.AWS_SESSION_TOKEN }} == null
+    #   uses: aws-actions/configure-aws-credentials@v1-node16
+    #   with:
+    #     role-to-assume: arn:aws:iam::223356124846:role/bks_brian-sigurdson_gh-practice
+    #     aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
-    - name: Configure AWS credentials - GitHub
-      uses: aws-actions/configure-aws-credentials@v1-node16
-      with:
-        role-to-assume: arn:aws:iam::223356124846:role/bks_brian-sigurdson_gh-practice
-        aws-region: us-east-1
-
-    - name: List bucket names
-      run: |
-        aws s3 ls
-        aws configure list
-        aws sts get-caller-identity
-        aws --version
+    # - name: Configure AWS credentials - Local
+    #   if: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #   uses: aws-actions/configure-aws-credentials@v1-node16
+    #   with:
+    #     role-to-assume: arn:aws:iam::223356124846:role/bks_brian-sigurdson_gh-practice
+    #     aws-region: ${{ env.AWS_DEFAULT_REGION }}
+    #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+        # aws-profile: ${{ env.AWS_PROFILE }}
     
+    - name: Run stuff
+      run: |   
+        pwd
+        echo $AWS_DEFAULT_REGION
+
+    # - name: List bucket names
+    #   run: |
+    #     aws s3 ls
+    #     aws configure list
+    #     aws sts get-caller-identity
 
 
+    
