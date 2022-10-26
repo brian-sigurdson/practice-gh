@@ -42,6 +42,7 @@ jobs:
         aws s3 ls
         aws configure list
         aws sts get-caller-identity
+        aws --version
     
 
 
