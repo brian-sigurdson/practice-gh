@@ -17,8 +17,8 @@ name: List AWS Buckets
 run-name: ${{ github.actor }} is printing bucket names
 on: push
 
-# Locally, the env vars will be set to inputted values, but on GH they should be null and they be set by
-# aws-actions/configure-aws-credentials@v1-node16
+# Locally, the env vars will be set to inputted values, but on GH they should be null and 
+# (i think) they are set by aws-actions/configure-aws-credentials@v1-node16 during authentication
 env:
   SESSION_TYPE: 'not-local'
   # comment out for now.  works locally, because i can pass in env vars, but on GH it would need
