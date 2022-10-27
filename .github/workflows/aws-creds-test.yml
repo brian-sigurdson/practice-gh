@@ -64,7 +64,7 @@ jobs:
     # - name: Run stuff
     #   run: |   
     #     # pwd
-    #     echo "SESSION_TYPE = $SESSION_TYPE"
+    #     echo "SESSION_TYPE = $SESSION_TYPE" 
 
     - name: List bucket names
       run: |
