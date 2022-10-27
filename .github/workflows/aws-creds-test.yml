@@ -57,9 +57,6 @@ jobs:
       with:
         role-to-assume: arn:aws:iam::223356124846:role/bks_brian-sigurdson_gh-practice
         aws-region: ${{ env.AWS_DEFAULT_REGION }}
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
 
     # - name: Run stuff
     #   run: |   
