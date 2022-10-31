@@ -47,13 +47,6 @@ jobs:
 
 #################### (above) boiler plate stuff needed for each run ####################
 
-    - name: Run stuff
-      run: |   
-        ls -la ./aws
-        echo $USER
-        whoami
-
-
     - name: Login to Amazon ECR
       if: ${{ env.SESSION_TYPE == 'not-local' }}
       id: login-ecr
@@ -61,8 +54,6 @@ jobs:
 
     - name: Build, tag, and push docker image to Amazon ECR
       if: ${{ env.SESSION_TYPE == 'not-local' }}
-      with:
-        aws-region: ${{ env.AWS_DEFAULT_REGION }}
       env:
         REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         REPOSITORY: 'bks/testing'
@@ -70,6 +61,7 @@ jobs:
       run: |
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG ./docker_stuff/
         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+        echo "REGISTRY/REPOSITORY = $REGISTRY/$REPOSITORY"
 
     # here is where you need to add code to handle working locally with ACT
     # this page has awscli commands:  https://docs.aws.amazon.com/AmazonECR/latest/userguide/getting-started-cli.html
