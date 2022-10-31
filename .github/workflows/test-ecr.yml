@@ -53,7 +53,7 @@ jobs:
 
     # Exemple of build using docker
     - name: Docker Build
-      env:
+      # env:
           # ECR_REPOSITORY: 'bks/testing'
           # CONTAINER_REGISTRY_HOST: '223356124846.dkr.ecr.us-east-1.amazonaws.com'
       run: docker build -t ${{ env.CONTAINER_REGISTRY_HOST }}/${{ env.ECR_REPOSITORY }}:latest ./docker_stuff/
