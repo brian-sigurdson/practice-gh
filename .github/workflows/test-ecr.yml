@@ -50,8 +50,6 @@ jobs:
         aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
 #################### (above) boiler plate stuff needed for each run ####################
-  ECR_REPOSITORY: 'cross/devtools/momo'
-  CONTAINER_REGISTRY_HOST: '223356124846.dkr.ecr.us-east-1.amazonaws.com'
 
     # Exemple of build using docker
     - name: Docker Build
