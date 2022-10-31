@@ -10,7 +10,8 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-
+  # ECR_REPOSITORY: 'bks/testing'
+  # CONTAINER_REGISTRY_HOST: '223356124846.dkr.ecr.us-east-1.amazonaws.com'
   
 
 jobs:
@@ -46,11 +47,22 @@ jobs:
 
 #################### (above) boiler plate stuff needed for each run ####################
 
+    - name: Run stuff
+      run: |   
+        ls -la ./aws
+        echo $USER
+        whoami
+
+
     - name: Login to Amazon ECR
+      if: ${{ env.SESSION_TYPE == 'not-local' }}
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
     - name: Build, tag, and push docker image to Amazon ECR
+      if: ${{ env.SESSION_TYPE == 'not-local' }}
+      with:
+        aws-region: ${{ env.AWS_DEFAULT_REGION }}
       env:
         REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         REPOSITORY: 'bks/testing'
@@ -58,3 +70,9 @@ jobs:
       run: |
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG ./docker_stuff/
         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+
+    # here is where you need to add code to handle working locally with ACT
+    # this page has awscli commands:  https://docs.aws.amazon.com/AmazonECR/latest/userguide/getting-started-cli.html
+    # this may help:  https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ecr/index.html
+    # I may need to configure this to avoid storing passwords even on temp instances: 
+    # https://docs.docker.com/engine/reference/commandline/login/#credentials-store 
