@@ -1,7 +1,7 @@
 # Referenced in the GIA Platform Documentation
 # Configure AWS Credentials: https://github.com/aws-actions/configure-aws-credentials#usage
 
-name: Test aws-ecr-push-action
+name: ECR - olxbr/aws-ecr-push-action
 run-name: ${{ github.actor }} is pushing to ECR
 on: push
 
