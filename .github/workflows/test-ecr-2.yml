@@ -1,0 +1,86 @@
+name: ECR - aws-actions/amazon-ecr-login
+run-name: ${{ github.actor }} is pushing to ECR
+on: push
+
+# Locally, the env vars will be set to inputted values, but on GH they should be null and 
+# (i think) they are set by aws-actions/configure-aws-credentials@v1-node16 during authentication
+env:
+  SESSION_TYPE: 'not-local'
+  AWS_DEFAULT_REGION: 'us-east-1'
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+
+  
+
+jobs:
+  test-erc:
+    name: Test ECR Actions
+    runs-on: ubuntu-latest
+
+#################### (below) boiler plate stuff needed for each run ####################
+   
+    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+    - name: Local - Install dependencies
+      if: ${{ env.SESSION_TYPE == 'local' }}
+      run: |
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip awscliv2.zip
+        ./aws/install > /dev/null
+        apt-get -y install less
+
+    - name: Checkout
+      uses: actions/checkout@v3     
+
+    - name: GitHub - Configure AWS credentials
+      if: ${{ env.SESSION_TYPE == 'not-local' }}
+      uses: aws-actions/configure-aws-credentials@v1-node16
+      with:
+        role-to-assume: arn:aws:iam::223356124846:role/bks_brian-sigurdson_gh-practice
+        aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+#################### (above) boiler plate stuff needed for each run ####################
+
+    # # Exemple of build using docker
+    # - name: Docker Build
+    #   env:
+    #       ECR_REPOSITORY: 'cross/devtools/momo'
+    #       CONTAINER_REGISTRY_HOST: '223356124846.dkr.ecr.us-east-1.amazonaws.com'
+    #   run: docker build -t ${{ env.CONTAINER_REGISTRY_HOST }}/${{ env.ECR_REPOSITORY }}:latest ./docker_stuff/
+    #       # docker build --pull -t ${{ secrets.CONTAINER_REGISTRY_HOST }}/$ECR_REPOSITORY:latest .
+    #       # docker tag ${{ secrets.CONTAINER_REGISTRY_HOST }}/$ECR_REPOSITORY:latest ${{ secrets.CONTAINER_REGISTRY_HOST }}/$ECR_REPOSITORY:0.2.2
+    #       # docker tag ${{ secrets.CONTAINER_REGISTRY_HOST }}/$ECR_REPOSITORY:latest ${{ secrets.CONTAINER_REGISTRY_HOST }}/$ECR_REPOSITORY:beta
+
+    # - name: Push to ECR
+    #   uses: olxbr/aws-ecr-push-action@v1
+    #   id: ecr
+    #   with:
+    #     # The complete repository name from ECR {BU}/{TEAM}/{PROJECT} (ex. cross/devtools/devtools-scripts).
+    #     ecr_repository: 'cross/devtools/momo'
+    #     # Comma-separated string of ECR image tags (ex. latest, 1.0.0)
+    #     tags: 'latest'
+    #   # Warning! Don't change this env values!
+    #   # Just copy and paste this whole block as is in your repo
+    #   env:
+    #   #   AWS_ACCOUNT_ID: ${{ secrets.AWS_CROSS_ACCOUNT_ID }}
+    #   #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_CROSS_ACCESS_KEY_ID }}
+    #   #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_CROSS_SECRET_ACCESS_KEY }}
+    #     AWS_PRINCIPAL_RULES: ${{ secrets.AWS_PRINCIPAL_RULES }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push docker image to Amazon ECR
+      env:
+        REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        REPOSITORY: 'cross/devtools/momo'
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG ./docker_stuff/
+        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
