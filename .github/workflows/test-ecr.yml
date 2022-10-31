@@ -14,7 +14,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
   #
-  ECR_REPOSITORY: 'bks/me/testing'
+  ECR_REPOSITORY: 'gialaboratory/beacon/beacon-frontend'
   CONTAINER_REGISTRY_HOST: '223356124846.dkr.ecr.us-east-1.amazonaws.com'
   
 
