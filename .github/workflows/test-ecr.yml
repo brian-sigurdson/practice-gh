@@ -14,8 +14,8 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
   #
-  ECR_REPOSITORY: 'cross/devtools/momo'
-  CONTAINER_REGISTRY_HOST: '223356124846.dkr.ecr.us-east-1.amazonaws.com'
+  # ECR_REPOSITORY: 'cross/devtools/momo'
+  # CONTAINER_REGISTRY_HOST: '223356124846.dkr.ecr.us-east-1.amazonaws.com'
   
 
 jobs:
@@ -50,12 +50,14 @@ jobs:
         aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
 #################### (above) boiler plate stuff needed for each run ####################
+  ECR_REPOSITORY: 'cross/devtools/momo'
+  CONTAINER_REGISTRY_HOST: '223356124846.dkr.ecr.us-east-1.amazonaws.com'
 
     # Exemple of build using docker
     - name: Docker Build
       # env:
-          # ECR_REPOSITORY: 'bks/testing'
-          # CONTAINER_REGISTRY_HOST: '223356124846.dkr.ecr.us-east-1.amazonaws.com'
+          ECR_REPOSITORY: 'cross/devtools/momo'
+          CONTAINER_REGISTRY_HOST: '223356124846.dkr.ecr.us-east-1.amazonaws.com'
       run: docker build -t ${{ env.CONTAINER_REGISTRY_HOST }}/${{ env.ECR_REPOSITORY }}:latest ./docker_stuff/
           # docker build --pull -t ${{ secrets.CONTAINER_REGISTRY_HOST }}/$ECR_REPOSITORY:latest .
           # docker tag ${{ secrets.CONTAINER_REGISTRY_HOST }}/$ECR_REPOSITORY:latest ${{ secrets.CONTAINER_REGISTRY_HOST }}/$ECR_REPOSITORY:0.2.2
@@ -66,7 +68,7 @@ jobs:
       id: ecr
       with:
         # The complete repository name from ECR {BU}/{TEAM}/{PROJECT} (ex. cross/devtools/devtools-scripts).
-        ecr_repository: ${{ env.ECR_REPOSITORY }}
+        ecr_repository: 'cross/devtools/momo'
         # Comma-separated string of ECR image tags (ex. latest, 1.0.0)
         tags: 'latest'
       # Warning! Don't change this env values!
