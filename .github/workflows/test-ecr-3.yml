@@ -60,6 +60,7 @@ jobs:
     - name: Download task definition
       run: |
         aws ecs describe-task-definition --region ${{ env.AWS_DEFAULT_REGION }} --task-definition my-td-wisdom --query taskDefinition > task-definition.json
+        
 
 # i got the following from here:  https://github.com/aws-actions/amazon-ecs-deploy-task-definition#task-definition-container-image-values
 # i believe it should update and deploy to ecs when new build
