@@ -47,7 +47,7 @@ jobs:
       run: |
         docker pull pauloclouddev/wisdom-img
         docker tag pauloclouddev/wisdom-img bks/wisdom
-        docker push $ECR_REGISTRY/$bks/wisdom:starting-img
+        docker push $ECR_REGISTRY/bks/wisdom:starting-img
 
         # docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./docker_stuff/
         # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
