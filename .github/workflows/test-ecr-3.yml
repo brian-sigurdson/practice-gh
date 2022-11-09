@@ -54,6 +54,13 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
+# It is highly recommended to treat the task definition "as code" by checking it into your git repository as a JSON file.
+# https://github.com/aws-actions/amazon-ecs-deploy-task-definition#task-definition-file
+# If you do not wish to store your task definition as a file in your git repository, your GitHub Actions workflow can download the existing task definition.
+    - name: Download task definition
+      run: |
+        aws ecs describe-task-definition --task-definition my-td-wisdom --query taskDefinition > task-definition.json
+
 # i got the following from here:  https://github.com/aws-actions/amazon-ecs-deploy-task-definition#task-definition-container-image-values
 # i believe it should update and deploy to ecs when new build
 
