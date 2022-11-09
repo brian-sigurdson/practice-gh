@@ -42,33 +42,33 @@ jobs:
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: 'bks/testing'   
+        ECR_REPOSITORY: 'bks/wisdom' #'bks/testing'   
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        docker pull pauloclouddev/wisdom-img
-        docker image ls
-        docker tag pauloclouddev/wisdom-img $ECR_REGISTRY/bks/wisdom:start
-        docker push $ECR_REGISTRY/bks/wisdom:start
+        # docker pull pauloclouddev/wisdom-img
+        # docker image ls
+        # docker tag pauloclouddev/wisdom-img $ECR_REGISTRY/bks/wisdom:start
+        # docker push $ECR_REGISTRY/bks/wisdom:start
 
-        # docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./docker_stuff/
-        # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        # echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./docker_stuff/
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
 # i got the following from here:  https://github.com/aws-actions/amazon-ecs-deploy-task-definition#task-definition-container-image-values
 # i believe it should update and deploy to ecs when new build
 
-    # - name: Fill in the new image ID in the Amazon ECS task definition
-    #   id: task-def
-    #   uses: aws-actions/amazon-ecs-render-task-definition@v1
-    #   with:
-    #     task-definition: task-definition.json
-    #     container-name: my-container # TBD
-    #     image: ${{ steps.build-image.outputs.image }}
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: task-definition.json
+        container-name: my-container # TBD
+        image: ${{ steps.build-image.outputs.image }}
 
-    # - name: Deploy Amazon ECS task definition
-    #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-    #   with:
-    #     task-definition: ${{ steps.task-def.outputs.task-definition }}
-    #     service: my-service # TBD
-    #     cluster: my-cluster # TBD
-    #     wait-for-service-stability: true
+    - name: Deploy Amazon ECS task definition
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        service: wisdom-service # my-service # TBD
+        cluster: ecs-course-fargate # my-cluster # TBD
+        wait-for-service-stability: true
