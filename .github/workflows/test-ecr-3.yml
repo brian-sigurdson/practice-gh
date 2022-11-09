@@ -46,7 +46,8 @@ jobs:
         IMAGE_TAG: ${{ github.sha }}
       run: |
         docker pull pauloclouddev/wisdom-img
-        docker tag pauloclouddev/wisdom-img bks/wisdom:start
+        docker image ls
+        docker tag pauloclouddev/wisdom-img $ECR_REGISTRY/bks/wisdom:start
         docker push $ECR_REGISTRY/bks/wisdom:start
 
         # docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./docker_stuff/
