@@ -1,0 +1,73 @@
+name: ECR - aws-actions/amazon-ecr-login
+run-name: ${{ github.actor }} is pushing to ECR
+on: push
+
+# Locally, the env vars will be set to inputted values, but on GH they should be null and 
+# (i think) they are set by aws-actions/configure-aws-credentials@v1-node16 during authentication
+env:
+  SESSION_TYPE: 'github'
+  AWS_DEFAULT_REGION: 'us-east-1'
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+  # ECR_REPOSITORY: 'bks/testing'
+  # ECR_REGISTRY: '223356124846.dkr.ecr.us-east-1.amazonaws.com'
+  
+
+jobs:
+  test-erc:
+    name: Test ECR Actions
+    runs-on: ubuntu-latest
+   
+    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3     
+
+    - name: GitHub - Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1-node16
+      with:
+        role-to-assume: arn:aws:iam::223356124846:role/bks_brian-sigurdson_gh-practice
+        aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+    - name: GitHub - Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: GitHub - Build, tag, and push docker image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: 'bks/testing'   
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker pull pauloclouddev/wisdom-img
+        docker tag pauloclouddev/wisdom-img bks/wisdom
+        docker push $ECR_REGISTRY/$bks/wisdom:starting-img
+
+        # docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./docker_stuff/
+        # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        # echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+# i got the following from here:  https://github.com/aws-actions/amazon-ecs-deploy-task-definition#task-definition-container-image-values
+# i believe it should update and deploy to ecs when new build
+
+    # - name: Fill in the new image ID in the Amazon ECS task definition
+    #   id: task-def
+    #   uses: aws-actions/amazon-ecs-render-task-definition@v1
+    #   with:
+    #     task-definition: task-definition.json
+    #     container-name: my-container # TBD
+    #     image: ${{ steps.build-image.outputs.image }}
+
+    # - name: Deploy Amazon ECS task definition
+    #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+    #   with:
+    #     task-definition: ${{ steps.task-def.outputs.task-definition }}
+    #     service: my-service # TBD
+    #     cluster: my-cluster # TBD
+    #     wait-for-service-stability: true

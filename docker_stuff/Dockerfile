@@ -1,3 +1,7 @@
-FROM alpine:latest
+#FROM alpine:latest
+FROM busybox:latest
 
-CMD ["echo", "Hello World"]
+RUN echo "hello world" > index.html
+
+CMD ["busybox", "httpd", "-f", "-p", "8080"]
+
