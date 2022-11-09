@@ -3,5 +3,5 @@ FROM busybox:latest
 
 RUN echo "hello world" > index.html
 
-CMD ["busybox", "httpd", "-f", "-p", "8080"]
+CMD ["busybox", "httpd", "-f", "-p", "80"]
 
