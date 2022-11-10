@@ -57,11 +57,14 @@ jobs:
         # docker tag pauloclouddev/wisdom-img $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-        # try building my own
+        # building my own
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./docker_stuff/
-        # docker image push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         docker image push --all-tags $ECR_REGISTRY/$ECR_REPOSITORY
+        #
+        # the following does not update ECR when there is no change to the image (even thought the cluster gets the newly tagged image)
+        # docker image push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG        
 
+        # set env var for later step
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
         # echo "ECR_IMAGE=$(echo $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG)" >> $GITHUB_ENV
 
